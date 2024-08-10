@@ -60,17 +60,17 @@ program husamsmatrixprojectistanbul.aleo {
             amount: difference,
         };
 
-        return (remaining, finalize_transfer_private_to_public(receiver, amount));
+        return (remaining, finalize_private_to_public(receiver, amount));
     }
 
-    async function finalize_transfer_private_to_public(public receiver: address, public amount: u64) {
+    async function finalize_private_to_public(public receiver: address, public amount: u64) {
 
-        let current_amount: u64 = Mapping::get_or_use(account, receiver, 0u64);
-        Mapping::set(account, receiver, current_amount + amount);
+        let receiver_amount: u64 = Mapping::get_or_use(account, receiver, 0u64);
+        Mapping::set(account, receiver, receiver_amount + amount);
     }
 
     
-    async transition transfer_public_to_private(public receiver: address, public amount: u64) -> (token, Future) {
+    async transition transfer_public_to_private(receiver: address, amount: u64) -> (token, Future) {
 
         let transferred: token = token {
             owner: receiver,
